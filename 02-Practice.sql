@@ -5,48 +5,59 @@ select * from countries;
 select * from locations;
 select * from job_history;
 
+select distinct department_id
+from employees
+order by department_id;
+
+
 --1
 select count(first_name)
 from employees
 where manager_id is not null;
 
 --2
-select max_salary - min_salary as "최고임금 - 최저임금"
-from jobs;
+select max(salary) - min(salary) as "최고임금 - 최저임금"
+from employees;
 
 
 --3
-select TO_CHAR(min(hire_date), 'YYYY"년"MM"월"DD"일"' ) as "date"
+select TO_CHAR(max(hire_date), 'YYYY"년"MM"월"DD"일"' ) as "date"
 from employees;
 
 
 --4
-select job_title, max_salary
-from jobs
-where max_salary>=10000
-order by max_salary desc;
+select round(avg(salary)) as "avg_salary", max(salary) as "max_salary",
+min(salary) as "min_salary", department_id
+from employees
+group by department_id
+order by department_id desc;
 
 --5
-select first_name, salary, nvl(commission_pct,0)
+select round(avg(salary)) as "avg_salary", max(salary) as "max_salary",
+min(salary) as "min_salary", job_id
 from employees
-where salary>=10000 and salary<14000
-order by salary desc;
+group by job_id
+order by min(salary) desc, round(avg(salary));
 
 --6
-select first_name||' '||last_name as "이름", salary as "월급",
-TO_CHAR(hire_date,'YYYY-MM') as "입사일", department_id as "부서번호"
-from employees
-where department_id in(10,90,100);
+select TO_CHAR(start_date,'YYYY-MM-DD') || ' '
+|| TO_CHAR(start_date,'DAY') as "real_date"
+from job_history
+where end_date - start_date = 
+(select max(end_date-start_date) from job_history);
 
 --7
-select first_name||' '||last_name as "이름", salary as "월급"
+select round(avg(salary)) as "avg_salary", min(salary) as "min_salary",
+round(avg(salary))- min(salary) as "result_array", department_id
 from employees
-where first_name like 'S%' or first_name like 's%';
+group by department_id
+having round(avg(salary))- min(salary) <2000
+order by round(avg(salary))- min(salary) desc;
 
 --8
-select department_name
-from departments
-order by length(department_name);
+select job_title, max_salary - min_salary as "최고임금 - 최저임금"
+from jobs
+order by max_salary - min_salary desc;
 
 --9
 select UPPER(country_name)
