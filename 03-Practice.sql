@@ -42,7 +42,7 @@ inner join departments dep
 on loc.location_id = dep.location_id
 order by loc.country_id;
 
---3-1 3번 문제 일단 보류한다
+--3-1
 select loc.country_id, co.country_name, dep.department_name, dep.department_id
 from countries co
 inner join locations loc

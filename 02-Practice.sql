@@ -60,16 +60,23 @@ from jobs
 order by max_salary - min_salary desc;
 
 --9
-select UPPER(country_name)
-from countries
-order by country_name;
+select manager_id, round(avg(salary)) as "avg_salary",
+min(salary) as "min_salary", max(salary) as "max_salary"
+from employees
+where hire_date >= '05/01/01'
+group by manager_id
+having round(avg(salary))>=5000
+order by round(avg(salary)) desc;
 
 --10
-select first_name||' '||last_name as "이름", salary as "월급",
-replace(phone_number,'.','-') as "전화번호",
-TO_CHAR(hire_date,'YYYY-MM-DD') as "입사일"
-from employees
-where hire_date<'2003-12-31';
+select first_name||' '||last_name "Name",
+case when hire_date < '02/12/31' then '창립멤버'
+when EXTRACT(YEAR FROM hire_date)='2003' then '03년입사'
+when EXTRACT(YEAR FROM hire_date)='2004' then '04년입사'
+else '상장 이후 입사'
+end as "optDate"
+from employees;
+
 
 
 
