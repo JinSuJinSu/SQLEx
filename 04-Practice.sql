@@ -78,16 +78,8 @@ group by salary;
 
 
 --8(나중에)
-select dep.department_id, dep.department_name, man.first_name,
-loc.city, co.country_name, reg.region_name
-from departments dep, locations loc, countries co,regions reg,
-employees emp, employees man
-where dep.location_id = loc.location_id
-and loc.country_id = co.country_id
-and co.region_id = reg.region_id
-and emp.manager_id = man.employee_id
-and emp.department_id = dep.department_id
-and emp.manager_id = dep.manager_id;
+SELECT employee_id, first_name, salary, hire_date
+
 
 
 
