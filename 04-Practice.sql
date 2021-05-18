@@ -70,15 +70,29 @@ order by  sum(emp.salary*12+nvl(emp.commission_pct,0)*12*emp.salary) desc;
 
 --7
 select employee_id, first_name, salary
-from employees
-where salary< any(select avg(salary)
+from employees emp
+where salary> any(select avg(salary)
                 from employees
-                group by department_id)
-group by salary;
+                where department_id=emp.department_id);
 
 
---8(나중에)
-SELECT employee_id, first_name, salary, hire_date
+--8
+select vt.ranking, emp.employee_id, emp.first_name,
+emp.salary,emp.hire_date from employees emp,
+(select rank() OVER (ORDER BY hire_date) ranking, hire_date
+from employees) vt
+where vt.ranking between 11 and 15
+and emp.hire_date = vt.hire_date
+group by emp.employee_id, emp.first_name,
+emp.salary,emp.hire_date,vt.ranking
+order by vt.ranking;
+
+
+
+
+
+
+
 
 
 
